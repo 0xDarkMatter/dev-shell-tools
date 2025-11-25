@@ -2,6 +2,10 @@
 
 Guidelines for AI coding assistants (Claude Code, Codex CLI, Gemini CLI, Amp, Aider, etc.)
 
+## Claude Code Skills
+
+If using Claude Code, install the skills from `skills/` directory to `~/.claude/skills/` for automatic tool preference and reduced permission prompts. See README.md for installation instructions.
+
 ## Available CLI Tools
 
 This environment has modern CLI tools installed. Prefer these over traditional equivalents:
