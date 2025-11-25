@@ -219,21 +219,28 @@ Copy-Item -Recurse skills\* $env:USERPROFILE\.claude\skills\
 
 ### Permissions
 
-To reduce permission prompts, add to your Claude settings (`~/.claude/settings.json`):
+Add to your Claude settings (`~/.claude/settings.json`):
 
 ```json
 {
   "permissions": {
     "allow": [
       "Bash(bat:*)", "Bash(eza:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)",
-      "Bash(ast-grep:*)", "Bash(jq:*)", "Bash(yq:*)",
-      "Bash(tokei:*)", "Bash(difft:*)",
-      "Bash(lazygit:*)", "Bash(gh:*)", "Bash(delta:*)",
-      "Bash(uv:*)", "Bash(just:*)"
+      "Bash(ast-grep:*)", "Bash(sg:*)", "Bash(jq:*)",
+      "Bash(tokei:*)", "Bash(difft:*)", "Bash(delta:*)"
+    ],
+    "ask": [
+      "Bash(yq:*)",
+      "Bash(uv:*)",
+      "Bash(gh:*)",
+      "Bash(lazygit:*)",
+      "Bash(just:*)"
     ]
   }
 }
 ```
+
+**Note**: Read-only tools are auto-approved. Tools that can modify state (`yq -i`, `uv`, `gh`, `lazygit`, `just`) prompt for confirmation. For fully permissive mode, move `ask` entries to `allow`.
 
 ## Project Structure
 
