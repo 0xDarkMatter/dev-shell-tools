@@ -1,0 +1,41 @@
+# Dev Shell Tools - Brewfile
+# Install with: brew bundle
+
+# Core Search & Navigation
+brew "ripgrep"          # rg - fast regex search
+brew "fd"               # fd - fast file finder
+brew "fzf"              # fzf - fuzzy finder
+brew "zoxide"           # z - smart cd
+brew "ast-grep"         # ast-grep - structural code search
+
+# File Viewing & Diffing
+brew "bat"              # bat - better cat
+brew "eza"              # eza - modern ls
+brew "git-delta"        # delta - git diff viewer
+brew "difftastic"       # difft - AST-aware diff
+
+# Git & Development
+brew "lazygit"          # lazygit - git TUI
+brew "gh"               # gh - GitHub CLI
+brew "tokei"            # tokei - code statistics
+
+# Data Processing
+brew "jq"               # jq - JSON processor
+brew "yq"               # yq - YAML/TOML processor
+brew "sd"               # sd - find & replace
+
+# Python Development
+brew "uv"               # uv - fast Python package manager
+
+# Task Running
+brew "just"             # just - command runner
+brew "httpie"           # http - HTTP client
+brew "procs"            # procs - process viewer
+
+# Directory Navigation
+brew "broot"            # br - tree + navigation + search
+
+# Optional (uncomment to install)
+# brew "starship"       # cross-shell prompt
+# brew "atuin"          # shell history
+# brew "hyperfine"      # benchmarking
