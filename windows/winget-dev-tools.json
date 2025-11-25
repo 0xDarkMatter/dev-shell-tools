@@ -1,0 +1,36 @@
+{
+  "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+  "CreationDate": "2025-11-25",
+  "Sources": [
+    {
+      "Packages": [
+        { "PackageIdentifier": "BurntSushi.ripgrep.MSVC" },
+        { "PackageIdentifier": "sharkdp.fd" },
+        { "PackageIdentifier": "sharkdp.bat" },
+        { "PackageIdentifier": "eza-community.eza" },
+        { "PackageIdentifier": "dandavison.delta" },
+        { "PackageIdentifier": "ajeetdsouza.zoxide" },
+        { "PackageIdentifier": "junegunn.fzf" },
+        { "PackageIdentifier": "ast-grep.ast-grep" },
+        { "PackageIdentifier": "jqlang.jq" },
+        { "PackageIdentifier": "casey.just" },
+        { "PackageIdentifier": "ducaale.xh" },
+        { "PackageIdentifier": "dalance.procs" },
+        { "PackageIdentifier": "astral-sh.uv" },
+        { "PackageIdentifier": "GitHub.cli" },
+        { "PackageIdentifier": "JesseDuffield.lazygit" },
+        { "PackageIdentifier": "Wilfred.difftastic" },
+        { "PackageIdentifier": "chmln.sd" },
+        { "PackageIdentifier": "XAMPPRocky.Tokei" },
+        { "PackageIdentifier": "mikefarah.yq" },
+        { "PackageIdentifier": "Dystroy.broot" }
+      ],
+      "SourceDetails": {
+        "Argument": "https://cdn.winget.microsoft.com/cache",
+        "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+        "Name": "winget",
+        "Type": "Microsoft.PreIndexed.Package"
+      }
+    }
+  ]
+}
