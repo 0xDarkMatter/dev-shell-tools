@@ -20,10 +20,11 @@
       "Bash(lazygit:*)",
       "Bash(gh:*)",
       "Bash(delta:*)",
-      "Bash(uv:*)",
-      "Bash(just:*)"
+      "Bash(uv:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [
+      "Bash(just:*)"
+    ]
   }
 }
