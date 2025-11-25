@@ -1,6 +1,80 @@
 # Dev Shell Tools
 
-Modern CLI tools for efficient development workflows. Cross-platform support for Windows and macOS.
+A curated collection of modern CLI tools that replace slow, verbose Unix defaults with fast, ergonomic alternatives. Built for developers who value speed and for AI coding assistants that benefit from concise, structured output.
+
+## Why These Tools?
+
+### Performance
+Most tools in this collection are written in **Rust** or **Go**, making them 10-100x faster than traditional Unix utilities:
+
+| Traditional | Modern | Speedup | Why |
+|-------------|--------|---------|-----|
+| `grep -r` | `rg` | 10-100x | Parallelized, respects .gitignore, smart defaults |
+| `find` | `fd` | 5-10x | Parallelized, intuitive syntax, ignores hidden files |
+| `cat` | `bat` | ~1x | Same speed, but adds syntax highlighting |
+| `pip install` | `uv` | 10-100x | Rust-based resolver, parallel downloads, caching |
+
+### Token Efficiency for AI Assistants
+When working with AI coding tools (Claude Code, Codex CLI, Gemini CLI, Amp, Aider), output verbosity directly impacts:
+- **Context window usage** - verbose output wastes tokens
+- **Response accuracy** - noise obscures signal
+- **Speed** - more tokens = slower responses
+
+These tools produce **structured, minimal output** by default:
+
+```bash
+# Bad: grep dumps everything, no structure
+grep -r "function" .
+# 500+ lines of noisy output
+
+# Good: rg respects .gitignore, groups by file
+rg "function" --type js
+# Clean, grouped output - 10x fewer lines
+
+# Bad: find lists everything including .git, node_modules
+find . -name "*.py"
+# Hundreds of irrelevant results
+
+# Good: fd ignores junk by default
+fd -e py
+# Only relevant files
+
+# Bad: tree dumps entire directory structure
+tree
+# 1000+ lines for any real project
+
+# Good: broot lets you explore interactively
+br
+# Navigate without dumping everything
+
+# Bad: diff shows line-by-line noise
+diff old.js new.js
+# Hard to see what actually changed
+
+# Good: difft shows semantic changes
+difft old.js new.js
+# Shows actual code structure changes
+```
+
+### Ergonomics
+Simpler syntax, sane defaults, and better UX:
+
+```bash
+# Find & replace
+sed 's/old/new/g' file          # Cryptic
+sd 'old' 'new' file             # Intuitive
+
+# Directory navigation
+cd ~/Projects/work/repo/src     # Tedious
+z repo                          # Smart jump
+
+# JSON processing
+cat data.json | python -c "..." # Verbose
+jq '.users[].name' data.json    # Purpose-built
+
+# YAML processing (K8s, Docker Compose, GitHub Actions)
+yq '.services | keys' docker-compose.yml
+```
 
 ## Quick Install
 
@@ -20,77 +94,62 @@ winget import -i windows\winget-dev-tools.json
 brew bundle --file=macos/Brewfile
 ```
 
-## Tool Categories
+## Tool Reference
 
-### Core Search & Navigation
+### Search & Navigation
 
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [ripgrep](https://github.com/BurntSushi/ripgrep) | `rg` | Fast regex search | 10-100x faster than grep, respects .gitignore |
-| [fd](https://github.com/sharkdp/fd) | `fd` | Fast file finder | Simpler syntax than find, ignores hidden files by default |
-| [fzf](https://github.com/junegunn/fzf) | `fzf` | Fuzzy finder | Pipe anything through it for interactive selection |
-| [zoxide](https://github.com/ajeetdsouza/zoxide) | `z` | Smart cd | Learns your habits, `z proj` jumps to ~/Projects |
-| [broot](https://github.com/Canop/broot) | `br` | Tree + nav + search | Explore large dirs without dumping full tree |
-| [ast-grep](https://github.com/ast-grep/ast-grep) | `ast-grep` | Structural code search | AST-aware search/replace, finds semantic patterns |
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | grep | `rg` | Fastest grep, respects .gitignore |
+| [fd](https://github.com/sharkdp/fd) | find | `fd` | Intuitive syntax, smart defaults |
+| [fzf](https://github.com/junegunn/fzf) | - | `fzf` | Fuzzy find anything |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | cd | `z` | Learns your frequent directories |
+| [broot](https://github.com/Canop/broot) | tree/ls | `br` | Interactive tree navigation |
+| [ast-grep](https://github.com/ast-grep/ast-grep) | grep | `ast-grep` | Search code by AST structure |
 
 ### File Viewing & Diffing
 
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [bat](https://github.com/sharkdp/bat) | `bat` | Better cat | Syntax highlighting, git integration, line numbers |
-| [eza](https://github.com/eza-community/eza) | `eza` | Modern ls | Icons, git status, tree view built-in |
-| [delta](https://github.com/dandavison/delta) | `delta` | Git diff viewer | Side-by-side diffs, syntax highlighting |
-| [difftastic](https://github.com/Wilfred/difftastic) | `difft` | AST-aware diff | Shows semantic changes, not line noise |
-
-### Git & Development
-
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [lazygit](https://github.com/jesseduffield/lazygit) | `lazygit` | Git TUI | Visual staging, branch management, faster than CLI |
-| [gh](https://cli.github.com/) | `gh` | GitHub CLI | PRs, issues, actions from terminal |
-| [tokei](https://github.com/XAMPPRocky/tokei) | `tokei` | Code statistics | Fast LOC counting by language |
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [bat](https://github.com/sharkdp/bat) | cat | `bat` | Syntax highlighting, line numbers |
+| [eza](https://github.com/eza-community/eza) | ls | `eza` | Git status, icons, tree view |
+| [delta](https://github.com/dandavison/delta) | diff | `delta` | Beautiful side-by-side diffs |
+| [difftastic](https://github.com/Wilfred/difftastic) | diff | `difft` | AST-aware semantic diffs |
 
 ### Data Processing
 
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [jq](https://github.com/jqlang/jq) | `jq` | JSON processor | Filter, transform, query JSON |
-| [yq](https://github.com/mikefarah/yq) | `yq` | YAML/TOML processor | Same as jq for config files (K8s, CI, Docker Compose) |
-| [sd](https://github.com/chmln/sd) | `sd` | Find & replace | Simpler than sed: `sd 'old' 'new' file` |
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [jq](https://github.com/jqlang/jq) | - | `jq` | Query/transform JSON |
+| [yq](https://github.com/mikefarah/yq) | - | `yq` | Query/transform YAML/TOML |
+| [sd](https://github.com/chmln/sd) | sed | `sd` | Intuitive find & replace |
 
-### Python Development
+### Git & Development
 
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [uv](https://github.com/astral-sh/uv) | `uv` | Package manager | 10-100x faster than pip, handles venvs & Python versions |
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [lazygit](https://github.com/jesseduffield/lazygit) | git cli | `lazygit` | Visual git TUI |
+| [gh](https://cli.github.com/) | - | `gh` | GitHub from terminal |
+| [tokei](https://github.com/XAMPPRocky/tokei) | cloc/wc | `tokei` | Fast code statistics |
 
-### Task Running
+### Python & Task Running
 
-| Tool | Command | Purpose | Why It Matters |
-|------|---------|---------|----------------|
-| [just](https://github.com/casey/just) | `just` | Command runner | Like make but simpler, cross-platform |
-| [httpie](https://httpie.io/) | `http` | HTTP client | Human-friendly curl alternative |
-| [procs](https://github.com/dalance/procs) | `procs` | Process viewer | Better ps with tree view, search |
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [uv](https://github.com/astral-sh/uv) | pip/venv | `uv` | 10-100x faster Python packaging |
+| [just](https://github.com/casey/just) | make | `just` | Simple command runner |
+| [httpie](https://httpie.io/) | curl | `http` | Human-friendly HTTP |
+| [procs](https://github.com/dalance/procs) | ps | `procs` | Better process viewer |
 
-## Optional Enhancements
+### Optional
 
 | Tool | Command | Purpose |
 |------|---------|---------|
 | [starship](https://starship.rs/) | - | Cross-shell prompt |
 | [atuin](https://atuin.sh/) | `atuin` | Shell history sync |
-| [hyperfine](https://github.com/sharkdp/hyperfine) | `hyperfine` | Benchmarking |
+| [hyperfine](https://github.com/sharkdp/hyperfine) | `hyperfine` | Command benchmarking |
 
 Install with `--optional` flag (Windows) or `-o` flag (macOS).
-
-## Token Efficiency for AI Coding Assistants
-
-These tools reduce token usage when working with agentic coding tools (Claude Code, Codex CLI, Gemini CLI, Amp, Aider, etc.):
-
-1. **ast-grep > grep** for structural queries - returns precise matches
-2. **fd -e py | xargs ...** to scope operations narrowly
-3. **jq filtering** before displaying JSON
-4. **tokei** for quick codebase overview instead of manual counting
-5. **difft** shows semantic changes, reducing noise in diffs
 
 ## Configuration
 
@@ -111,21 +170,23 @@ These tools reduce token usage when working with agentic coding tools (Claude Co
     external = difft
 ```
 
-### Zoxide initialization
+### Shell initialization
 
-**PowerShell** (add to `$PROFILE`):
+**Zoxide** - add to your shell config:
+
 ```powershell
+# PowerShell ($PROFILE)
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 ```
 
-**Zsh** (add to `~/.zshrc`):
 ```bash
-eval "$(zoxide init zsh)"
+# Zsh (~/.zshrc) or Bash (~/.bashrc)
+eval "$(zoxide init zsh)"  # or bash
 ```
 
-**Bash** (add to `~/.bashrc`):
+**Broot** - run once to install shell function:
 ```bash
-eval "$(zoxide init bash)"
+br --install
 ```
 
 ## Project Structure
@@ -144,4 +205,4 @@ dev-shell-tools/
 
 ## License
 
-MIT - Use freely for your own dev environment setup.
+MIT
