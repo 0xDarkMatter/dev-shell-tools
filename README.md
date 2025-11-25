@@ -189,12 +189,66 @@ eval "$(zoxide init zsh)"  # or bash
 br --install
 ```
 
+## Claude Code Skills
+
+This project includes 7 skills that teach Claude Code to use these modern tools automatically.
+
+### Installation
+
+Copy skills to your global Claude directory:
+
+```bash
+# Unix/macOS
+cp -r skills/* ~/.claude/skills/
+
+# Windows (PowerShell)
+Copy-Item -Recurse skills\* $env:USERPROFILE\.claude\skills\
+```
+
+### Available Skills
+
+| Skill | Purpose | Tools |
+|-------|---------|-------|
+| `safe-file-reader` | View files without permission prompts | bat, eza, cat, head, tail |
+| `structural-search` | AST-aware code search | ast-grep |
+| `data-processing` | Query JSON/YAML data | jq, yq |
+| `code-stats` | Codebase analysis | tokei, difft |
+| `git-workflow` | Enhanced git operations | lazygit, gh, delta |
+| `python-env` | Fast Python packaging | uv |
+| `task-runner` | Project commands | just |
+
+### Permissions
+
+To reduce permission prompts, add to your Claude settings (`~/.claude/settings.json`):
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(bat:*)", "Bash(eza:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)",
+      "Bash(ast-grep:*)", "Bash(jq:*)", "Bash(yq:*)",
+      "Bash(tokei:*)", "Bash(difft:*)",
+      "Bash(lazygit:*)", "Bash(gh:*)", "Bash(delta:*)",
+      "Bash(uv:*)", "Bash(just:*)"
+    ]
+  }
+}
+```
+
 ## Project Structure
 
 ```
 dev-shell-tools/
 ├── README.md           # This file
 ├── AGENTS.md           # AI assistant guidelines
+├── skills/             # Claude Code skills
+│   ├── safe-file-reader/
+│   ├── structural-search/
+│   ├── data-processing/
+│   ├── code-stats/
+│   ├── git-workflow/
+│   ├── python-env/
+│   └── task-runner/
 ├── windows/
 │   ├── setup.ps1       # PowerShell installer
 │   └── winget-dev-tools.json
