@@ -151,6 +151,43 @@ brew bundle --file=macos/Brewfile
 
 Install with `--optional` flag (Windows) or `-o` flag (macOS).
 
+## Verify Installation
+
+Test that tools are installed and working:
+
+```bash
+# Quick check (requires just)
+just verify
+
+# With performance benchmarks
+just benchmark
+
+# Or run scripts directly:
+# Windows
+.\tests\verify.ps1 -Benchmark
+
+# macOS/Linux
+./tests/verify.sh --benchmark
+```
+
+Sample output:
+```
+╔════════════════════════════════════════╗
+║   Dev Shell Tools - Verification Test  ║
+╚════════════════════════════════════════╝
+
+=== Tool Installation Check ===
+  [OK] ripgrep (rg) - ripgrep 14.1.0
+  [OK] fd (fd) - fd 10.1.0
+  ...
+
+=== Performance Benchmarks ===
+  ripgrep vs grep:
+    rg:   12ms
+    grep: 156ms
+    Speedup: 13x faster
+```
+
 ## Configuration
 
 ### Git with delta
@@ -248,6 +285,7 @@ Add to your Claude settings (`~/.claude/settings.json`):
 dev-shell-tools/
 ├── README.md           # This file
 ├── AGENTS.md           # AI assistant guidelines
+├── justfile            # Cross-platform task runner
 ├── skills/             # Claude Code skills
 │   ├── safe-file-reader/
 │   ├── structural-search/
@@ -256,6 +294,9 @@ dev-shell-tools/
 │   ├── git-workflow/
 │   ├── python-env/
 │   └── task-runner/
+├── tests/
+│   ├── verify.ps1      # Windows verification
+│   └── verify.sh       # macOS/Linux verification
 ├── windows/
 │   ├── setup.ps1       # PowerShell installer
 │   └── winget-dev-tools.json
