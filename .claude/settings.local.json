@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(powershell -Command 'Get-ChildItem \"\"$env:USERPROFILE\\.claude\\skills\"\" | Select-Object Name')",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd test suite for installation verification and benchmarks\n\n- Add tests/verify.ps1 for Windows (PowerShell)\n- Add tests/verify.sh for macOS/Linux (Bash)\n- Add justfile for cross-platform task running\n- Update README with verification instructions\n\nTests check installation status of all 20 tools and run functional\ntests. Optional --benchmark flag compares performance vs traditional\ntools (rg vs grep, fd vs find).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(winget install:*)",
+      "Bash(winget search:*)",
+      "Skill(safe-file-reader)",
+      "Bash(eza -la --git:*)",
+      "Bash(bat:*)",
+      "Skill(code-stats)",
+      "Bash(tokei)"
     ],
     "deny": [],
     "ask": []

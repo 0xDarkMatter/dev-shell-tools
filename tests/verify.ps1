@@ -18,6 +18,41 @@ param(
 
 $ErrorActionPreference = "Continue"
 
+# Common winget installation paths to search
+$WingetSearchPaths = @(
+    "$env:LOCALAPPDATA\Microsoft\WinGet\Packages",
+    "$env:LOCALAPPDATA\Microsoft\WinGet\Links",
+    "$env:ProgramFiles",
+    "${env:ProgramFiles(x86)}",
+    "$env:LOCALAPPDATA\Programs",
+    "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps",
+    "$env:USERPROFILE\.cargo\bin"
+)
+
+# Find executable in common paths
+function Find-ToolPath {
+    param([string]$ExeName)
+
+    # First try Get-Command (in PATH)
+    $cmd = Get-Command $ExeName -ErrorAction SilentlyContinue
+    if ($cmd) { return $cmd.Source }
+
+    # Search common winget paths
+    foreach ($basePath in $WingetSearchPaths) {
+        if (-not (Test-Path $basePath)) { continue }
+
+        # Direct match
+        $direct = Join-Path $basePath "$ExeName.exe"
+        if (Test-Path $direct) { return $direct }
+
+        # Search subdirectories (one level deep for speed)
+        $found = Get-ChildItem -Path $basePath -Filter "$ExeName.exe" -Recurse -Depth 2 -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($found) { return $found.FullName }
+    }
+
+    return $null
+}
+
 # Colors
 function Write-Success { param($msg) Write-Host "  [OK] " -NoNewline -ForegroundColor Green; Write-Host $msg }
 function Write-Fail { param($msg) Write-Host "  [FAIL] " -NoNewline -ForegroundColor Red; Write-Host $msg }
@@ -61,12 +96,20 @@ Write-Header "Tool Installation Check"
 
 $installed = 0
 $missing = @()
+$foundPaths = @{}  # Track paths for tools not in PATH
 
 foreach ($tool in $tools) {
-    $cmd = Get-Command $tool.Cmd -ErrorAction SilentlyContinue
-    if ($cmd) {
-        $version = & $tool.Cmd $tool.VersionFlag 2>&1 | Select-Object -First 1
-        Write-Success "$($tool.Name) ($($tool.Cmd)) - $version"
+    $toolPath = Find-ToolPath $tool.Cmd
+    if ($toolPath) {
+        $version = & $toolPath $tool.VersionFlag 2>&1 | Select-Object -First 1
+        $inPath = Get-Command $tool.Cmd -ErrorAction SilentlyContinue
+        if ($inPath) {
+            Write-Success "$($tool.Name) ($($tool.Cmd)) - $version"
+        } else {
+            # Found but not in PATH
+            Write-Success "$($tool.Name) ($($tool.Cmd)) - $version [NOT IN PATH]"
+            $foundPaths[$tool.Cmd] = $toolPath
+        }
         $installed++
     } else {
         Write-Fail "$($tool.Name) ($($tool.Cmd)) - NOT INSTALLED"
@@ -83,6 +126,19 @@ if ($missing.Count -gt 0) {
     Write-Host "  .\windows\setup.ps1" -ForegroundColor Gray
 }
 
+if ($foundPaths.Count -gt 0) {
+    Write-Host "`nTools found but not in PATH:" -ForegroundColor Yellow
+    foreach ($tool in $foundPaths.Keys) {
+        $dir = Split-Path $foundPaths[$tool] -Parent
+        Write-Host "  $tool -> $dir" -ForegroundColor Gray
+    }
+    Write-Host "`nTo add to PATH, run:" -ForegroundColor Yellow
+    $dirs = $foundPaths.Values | ForEach-Object { Split-Path $_ -Parent } | Sort-Object -Unique
+    foreach ($dir in $dirs) {
+        Write-Host "  `$env:Path += `";$dir`"" -ForegroundColor Gray
+    }
+}
+
 # ============================================
 # SECTION 2: Functional Tests
 # ============================================
@@ -90,36 +146,41 @@ if ($missing.Count -gt 0) {
 Write-Header "Functional Tests"
 
 # Test rg
-if (Get-Command rg -ErrorAction SilentlyContinue) {
-    $result = "test string" | rg "test" 2>&1
+$rgPath = Find-ToolPath "rg"
+if ($rgPath) {
+    $result = "test string" | & $rgPath "test" 2>&1
     if ($result -match "test") { Write-Success "rg: pattern matching works" }
     else { Write-Fail "rg: pattern matching failed" }
 }
 
 # Test fd
-if (Get-Command fd -ErrorAction SilentlyContinue) {
-    $result = fd --version 2>&1
+$fdPath = Find-ToolPath "fd"
+if ($fdPath) {
+    $result = & $fdPath --version 2>&1
     if ($result) { Write-Success "fd: file finding works" }
     else { Write-Fail "fd: file finding failed" }
 }
 
 # Test jq
-if (Get-Command jq -ErrorAction SilentlyContinue) {
-    $result = '{"test": 123}' | jq '.test' 2>&1
+$jqPath = Find-ToolPath "jq"
+if ($jqPath) {
+    $result = '{"test": 123}' | & $jqPath '.test' 2>&1
     if ($result -eq "123") { Write-Success "jq: JSON parsing works" }
     else { Write-Fail "jq: JSON parsing failed" }
 }
 
 # Test yq
-if (Get-Command yq -ErrorAction SilentlyContinue) {
-    $result = "test: 123" | yq '.test' 2>&1
+$yqPath = Find-ToolPath "yq"
+if ($yqPath) {
+    $result = "test: 123" | & $yqPath '.test' 2>&1
     if ($result -eq "123") { Write-Success "yq: YAML parsing works" }
     else { Write-Fail "yq: YAML parsing failed" }
 }
 
 # Test tokei
-if (Get-Command tokei -ErrorAction SilentlyContinue) {
-    $result = tokei --version 2>&1
+$tokeiPath = Find-ToolPath "tokei"
+if ($tokeiPath) {
+    $result = & $tokeiPath --version 2>&1
     if ($result) { Write-Success "tokei: code stats works" }
     else { Write-Fail "tokei: code stats failed" }
 }
@@ -146,10 +207,11 @@ if ($Benchmark) {
     Write-Host "Running benchmarks on 100 files..." -ForegroundColor Gray
 
     # Benchmark: rg vs findstr (Windows grep equivalent)
-    if (Get-Command rg -ErrorAction SilentlyContinue) {
+    $rgPath = Find-ToolPath "rg"
+    if ($rgPath) {
         Write-Host "`n  ripgrep vs findstr:" -ForegroundColor Yellow
 
-        $rgTime = Measure-Command { rg "pattern" $tempDir 2>&1 | Out-Null }
+        $rgTime = Measure-Command { & $rgPath "pattern" $tempDir 2>&1 | Out-Null }
         $findstrTime = Measure-Command { Get-ChildItem $tempDir -File | ForEach-Object { findstr "pattern" $_.FullName } 2>&1 | Out-Null }
 
         $speedup = [math]::Round($findstrTime.TotalMilliseconds / $rgTime.TotalMilliseconds, 1)
@@ -159,10 +221,11 @@ if ($Benchmark) {
     }
 
     # Benchmark: fd vs Get-ChildItem
-    if (Get-Command fd -ErrorAction SilentlyContinue) {
+    $fdPath = Find-ToolPath "fd"
+    if ($fdPath) {
         Write-Host "`n  fd vs Get-ChildItem:" -ForegroundColor Yellow
 
-        $fdTime = Measure-Command { fd "\.txt$" $tempDir 2>&1 | Out-Null }
+        $fdTime = Measure-Command { & $fdPath "\.txt$" $tempDir 2>&1 | Out-Null }
         $gciTime = Measure-Command { Get-ChildItem $tempDir -Filter "*.txt" -Recurse 2>&1 | Out-Null }
 
         $speedup = [math]::Round($gciTime.TotalMilliseconds / $fdTime.TotalMilliseconds, 1)
