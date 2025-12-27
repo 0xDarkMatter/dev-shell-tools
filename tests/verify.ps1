@@ -80,7 +80,10 @@ $tools = @(
     @{ Name = "lazygit"; Cmd = "lazygit"; VersionFlag = "--version"; Replaces = "git cli" },
     @{ Name = "difftastic"; Cmd = "difft"; VersionFlag = "--version"; Replaces = "diff" },
     @{ Name = "tokei"; Cmd = "tokei"; VersionFlag = "--version"; Replaces = "cloc" },
-    @{ Name = "broot"; Cmd = "broot"; VersionFlag = "--version"; Replaces = "tree" }
+    @{ Name = "broot"; Cmd = "broot"; VersionFlag = "--version"; Replaces = "tree" },
+    @{ Name = "dust"; Cmd = "dust"; VersionFlag = "--version"; Replaces = "du" },
+    @{ Name = "bottom"; Cmd = "btm"; VersionFlag = "--version"; Replaces = "top/htop" },
+    @{ Name = "tealdeer"; Cmd = "tldr"; VersionFlag = "--version"; Replaces = "man" }
 )
 
 Write-Host ""
@@ -183,6 +186,22 @@ if ($tokeiPath) {
     $result = & $tokeiPath --version 2>&1
     if ($result) { Write-Success "tokei: code stats works" }
     else { Write-Fail "tokei: code stats failed" }
+}
+
+# Test dust
+$dustPath = Find-ToolPath "dust"
+if ($dustPath) {
+    $result = & $dustPath --version 2>&1
+    if ($result) { Write-Success "dust: disk usage works" }
+    else { Write-Fail "dust: disk usage failed" }
+}
+
+# Test tldr
+$tldrPath = Find-ToolPath "tldr"
+if ($tldrPath) {
+    $result = & $tldrPath --version 2>&1
+    if ($result) { Write-Success "tldr: command examples works" }
+    else { Write-Fail "tldr: command examples failed" }
 }
 
 # ============================================

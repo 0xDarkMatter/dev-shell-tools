@@ -29,11 +29,17 @@ brew "uv"               # uv - fast Python package manager
 
 # Task Running
 brew "just"             # just - command runner
-brew "httpie"           # http - HTTP client
+brew "xh"               # xh - HTTP client (httpie-compatible)
 brew "procs"            # procs - process viewer
 
 # Directory Navigation
 brew "broot"            # br - tree + navigation + search
+
+# System & Utilities
+brew "dust"             # dust - visual disk usage
+brew "bottom"           # btm - system monitor
+brew "tealdeer"         # tldr - command examples
+brew "ouch"             # ouch - universal decompression
 
 # Optional (uncomment to install)
 # brew "starship"       # cross-shell prompt

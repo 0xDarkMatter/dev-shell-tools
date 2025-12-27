@@ -56,7 +56,10 @@ $coreTools = @(
     @{ Id = "chmln.sd"; Name = "sd" },
     @{ Id = "XAMPPRocky.Tokei"; Name = "tokei" },
     @{ Id = "mikefarah.yq"; Name = "yq" },
-    @{ Id = "Dystroy.broot"; Name = "broot (br)" }
+    @{ Id = "Dystroy.broot"; Name = "broot (br)" },
+    @{ Id = "bootandy.dust"; Name = "dust" },
+    @{ Id = "Clement.bottom"; Name = "bottom (btm)" },
+    @{ Id = "dbrgn.tealdeer"; Name = "tealdeer (tldr)" }
 )
 
 $optionalTools = @(
@@ -104,7 +107,7 @@ if ($Optional) {
 
 Write-Host "`nChecking PATH for installed tools..." -ForegroundColor Yellow
 
-$toolCommands = @("rg", "fd", "bat", "eza", "delta", "zoxide", "fzf", "ast-grep", "jq", "yq", "sd", "just", "xh", "procs", "uv", "gh", "lazygit", "difft", "tokei", "broot")
+$toolCommands = @("rg", "fd", "bat", "eza", "delta", "zoxide", "fzf", "ast-grep", "jq", "yq", "sd", "just", "xh", "procs", "uv", "gh", "lazygit", "difft", "tokei", "broot", "dust", "btm", "tldr")
 
 $searchPaths = @(
     "$env:LOCALAPPDATA\Microsoft\WinGet\Packages",
@@ -175,6 +178,9 @@ Next steps:
 
 4. Authenticate with GitHub:
    gh auth login
+
+5. (Optional) Install ouch via Scoop:
+   scoop install ouch
 
 For full documentation, see ../README.md
 "@ -ForegroundColor Gray

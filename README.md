@@ -132,13 +132,22 @@ brew bundle --file=macos/Brewfile
 | [gh](https://cli.github.com/) | - | `gh` | GitHub from terminal |
 | [tokei](https://github.com/XAMPPRocky/tokei) | cloc/wc | `tokei` | Fast code statistics |
 
+### System & Utilities
+
+| Tool | Replaces | Command | Key Benefit |
+|------|----------|---------|-------------|
+| [dust](https://github.com/bootandy/dust) | du | `dust` | Visual disk usage sorted by size |
+| [bottom](https://github.com/ClementTsang/bottom) | top/htop | `btm` | Cross-platform system monitor |
+| [tealdeer](https://github.com/dbrgn/tealdeer) | man/tldr | `tldr` | Instant command examples |
+| [xh](https://github.com/ducaale/xh) | curl | `xh` | HTTPie-compatible, Rust speed |
+| [ouch](https://github.com/ouch-org/ouch) | tar/unzip | `ouch` | Universal decompression |
+
 ### Python & Task Running
 
 | Tool | Replaces | Command | Key Benefit |
 |------|----------|---------|-------------|
 | [uv](https://github.com/astral-sh/uv) | pip/venv | `uv` | 10-100x faster Python packaging |
 | [just](https://github.com/casey/just) | make | `just` | Simple command runner |
-| [httpie](https://httpie.io/) | curl | `http` | Human-friendly HTTP |
 | [procs](https://github.com/dalance/procs) | ps | `procs` | Better process viewer |
 
 ### Optional
@@ -150,6 +159,8 @@ brew bundle --file=macos/Brewfile
 | [hyperfine](https://github.com/sharkdp/hyperfine) | `hyperfine` | Command benchmarking |
 
 Install with `--optional` flag (Windows) or `-o` flag (macOS).
+
+**Note:** `ouch` requires [Scoop](https://scoop.sh/) on Windows (`scoop install ouch`) or `cargo install ouch`.
 
 ## Verify Installation
 

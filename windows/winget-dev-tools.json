@@ -23,7 +23,10 @@
         { "PackageIdentifier": "chmln.sd" },
         { "PackageIdentifier": "XAMPPRocky.Tokei" },
         { "PackageIdentifier": "mikefarah.yq" },
-        { "PackageIdentifier": "Dystroy.broot" }
+        { "PackageIdentifier": "Dystroy.broot" },
+        { "PackageIdentifier": "bootandy.dust" },
+        { "PackageIdentifier": "Clement.bottom" },
+        { "PackageIdentifier": "dbrgn.tealdeer" }
       ],
       "SourceDetails": {
         "Argument": "https://cdn.winget.microsoft.com/cache",

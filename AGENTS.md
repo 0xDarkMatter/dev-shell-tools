@@ -19,6 +19,11 @@ This environment has modern CLI tools installed. Prefer these over traditional e
 | `sed` | `sd` | `sd 'old' 'new' file` |
 | `pip install` | `uv pip install` | `uv pip install requests` |
 | `tree` | `br` | `br` (interactive tree navigation) |
+| `du -h` | `dust` | `dust` (visual disk usage) |
+| `top`/`htop` | `btm` | `btm` (system monitor) |
+| `man`/`--help` | `tldr` | `tldr fd` (instant examples) |
+| `curl` | `xh` | `xh GET api.example.com` |
+| `tar`/`unzip` | `ouch` | `ouch decompress file.tar.gz` |
 
 ## Token Efficiency Guidelines
 
@@ -35,6 +40,8 @@ This environment has modern CLI tools installed. Prefer these over traditional e
 - `yq '.services | keys' docker-compose.yml` extracts specific YAML fields
 - `br` for interactive directory exploration (avoids dumping full tree)
 - `difft` shows semantic changes, less noise than line diffs
+- `tldr <cmd>` for quick examples instead of verbose man pages
+- `dust -d 2` limits disk usage depth
 
 ### Project Commands
 Check for a `justfile` in the project root for common operations:

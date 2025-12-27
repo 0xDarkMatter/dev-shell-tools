@@ -51,7 +51,7 @@ CORE_TOOLS=(
     "ast-grep:ast-grep"
     "jq:jq"
     "just:just"
-    "httpie:http"
+    "xh:xh"
     "procs:procs"
     "uv:uv"
     "gh:gh"
@@ -61,6 +61,10 @@ CORE_TOOLS=(
     "tokei:tokei"
     "yq:yq"
     "broot:br"
+    "dust:dust"
+    "bottom:btm"
+    "tealdeer:tldr"
+    "ouch:ouch"
 )
 
 OPTIONAL_TOOLS=(
